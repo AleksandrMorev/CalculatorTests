@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CalcTests {
     private static AndroidDriver<WebElement> driver;
+    private CalcPage calcPage;
 
     @BeforeAll
     public static void initialize() {
@@ -27,14 +28,13 @@ public class CalcTests {
 
     @BeforeEach
     public void clear(){
-        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage = CalcPage.getInstance(driver);
         calcPage.click_ac();
     }
 
     @Test
     @DisplayName("Push button check")
     public void checkButtonsPushed() {
-        CalcPage calcPage = CalcPage.getInstance(driver);
         calcPage.click_0();
         calcPage.click_1();
         calcPage.click_plus();
@@ -55,7 +55,6 @@ public class CalcTests {
     @Test
     @DisplayName("Addition check")
     public void checkAddition() {
-        CalcPage calcPage = CalcPage.getInstance(driver);
         calcPage.click_3();
         calcPage.click_plus();
         calcPage.click_2();
@@ -66,7 +65,6 @@ public class CalcTests {
     @Test
     @DisplayName("Multiplication check")
     public void checkMultiplication() {
-        CalcPage calcPage = CalcPage.getInstance(driver);
         calcPage.click_6();
         calcPage.click_mul();
         calcPage.click_9();
@@ -77,7 +75,6 @@ public class CalcTests {
     @Test
     @DisplayName("Division check")
     public void checkDivision() {
-        CalcPage calcPage = CalcPage.getInstance(driver);
         calcPage.click_8();
         calcPage.click_div();
         calcPage.click_4();
@@ -88,7 +85,6 @@ public class CalcTests {
     @Test
     @DisplayName("Subtraction check")
     public void checkSubtraction() {
-        CalcPage calcPage = CalcPage.getInstance(driver);
         calcPage.click_7();
         calcPage.click_minus();
         calcPage.click_5();
