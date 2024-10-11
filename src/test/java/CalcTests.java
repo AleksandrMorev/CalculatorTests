@@ -1,18 +1,19 @@
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.MobileCapabilityType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class CalcTests {
-    private static AndroidDriver<AndroidElement> driver;
+    private static AndroidDriver<WebElement> driver;
+
     @BeforeAll
-    public static void initialize(){
+    public static void initialize() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 7");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
@@ -24,12 +25,81 @@ public class CalcTests {
         }
     }
 
+    @BeforeEach
+    public void clear(){
+        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage.click_ac();
+    }
+
     @Test
-    public void checkCalculate() {
-        driver.findElementByXPath("//android.widget.ImageButton[@content-desc=\"3\"]").click();
-        driver.findElementByXPath("//android.widget.ImageButton[@content-desc=\"plus\"]").click();
-        driver.findElementByXPath("//android.widget.ImageButton[@content-desc=\"2\"]").click();
-        driver.findElementByXPath("//android.widget.ImageButton[@content-desc=\"equals\"]").click();
-        assert(driver.findElementByXPath("//android.widget.TextView[@resource-id=\"com.google.android.calculator:id/result_final\"]").getText().equals("5"));
+    @DisplayName("Push button check")
+    public void checkButtonsPushed() {
+        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage.click_0();
+        calcPage.click_1();
+        calcPage.click_plus();
+        calcPage.click_2();
+        calcPage.click_mul();
+        calcPage.click_3();
+        calcPage.click_div();
+        calcPage.click_4();
+        calcPage.click_minus();
+        calcPage.click_5();
+        calcPage.click_6();
+        calcPage.click_7();
+        calcPage.click_8();
+        calcPage.click_9();
+        assertEquals("01\u002b2\u00D73\u00F74\u221256789", calcPage.scanFormula());
+    }
+
+    @Test
+    @DisplayName("Addition check")
+    public void checkAddition() {
+        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage.click_3();
+        calcPage.click_plus();
+        calcPage.click_2();
+        calcPage.click_equals();
+        assertEquals("5", calcPage.scanResult());
+    }
+
+    @Test
+    @DisplayName("Multiplication check")
+    public void checkMultiplication() {
+        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage.click_6();
+        calcPage.click_mul();
+        calcPage.click_9();
+        calcPage.click_equals();
+        assertEquals("54", calcPage.scanResult());
+    }
+
+    @Test
+    @DisplayName("Division check")
+    public void checkDivision() {
+        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage.click_8();
+        calcPage.click_div();
+        calcPage.click_4();
+        calcPage.click_equals();
+        assertEquals("2", calcPage.scanResult());
+    }
+
+    @Test
+    @DisplayName("Subtraction check")
+    public void checkSubtraction() {
+        CalcPage calcPage = CalcPage.getInstance(driver);
+        calcPage.click_7();
+        calcPage.click_minus();
+        calcPage.click_5();
+        calcPage.click_equals();
+        assertEquals("2", calcPage.scanResult());
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
